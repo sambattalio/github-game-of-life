@@ -115,8 +115,7 @@ def count_to_index(count):
 
 ''' MAIN LAMBDA '''
 
-#@app.schedule('cron(0 10 * * ? *)')
-@app.schedule('rate(1 minute)')
+@app.schedule('cron(0 10 * * ? *)')
 def game_handler(event):
     ''' run game of life and create/close issues '''
     ssm = boto3.client('ssm', region_name='us-east-1')
