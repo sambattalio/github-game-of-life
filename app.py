@@ -90,6 +90,8 @@ def check_neighbors(copy, x, y):
     total = 0
     for i in range(-1,2):
         for j in range(-1,2):
+            if i == 0 and j == 0:
+                continue
             total += copy[x+i][y+j] if copy[x+i][y+j] != -1 else 0
     return total
 
@@ -99,10 +101,12 @@ def update_game(board):
     for i in range(1, int(os.environ['WIDTH'])-1):
         for j in range(1, int(os.environ['HEIGHT'])-1):
             total = check_neighbors(copy,i,j)
-            if total != 3:
-                board[i][j] = 0
+            if board[i][j]:
+                if not 2 <= total < 4:
+                    board[i][j] = 0
             else:
-                board[i][j] = 1
+                if total == 3:
+                    board[i][j] = 1
 
 def count_to_index(count):
     ''' convert daily count 1-28 to coordinate '''
