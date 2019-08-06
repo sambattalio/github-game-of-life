@@ -1,4 +1,6 @@
 import os
+import json
+import requests
 from copy import deepcopy
 from ast import literal_eval
 from chalice import Chalice
@@ -59,7 +61,7 @@ def make_issue(title, headers):
 def close_issues(headers):
     ''' Use github api to close all issues '''
     # info for get/patch
-    get_all_url = BASE_URL + '/issues'
+    get_all_url = os.environ['BASE_URL'] + '/issues'
     data = {
         'state': 'closed'
     }
@@ -119,7 +121,7 @@ def count_to_index(count):
 
 ''' MAIN LAMBDA '''
 
-@app.schedule('cron(30 15 * * ? *)')
+@app.schedule('cron(38 15 * * ? *)')
 def game_handler(event):
     ''' run game of life and create/close issues '''
     ssm = boto3.client('ssm', region_name='us-east-1')
