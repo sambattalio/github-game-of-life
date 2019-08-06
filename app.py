@@ -29,8 +29,8 @@ def load_params(ssm):
     if not BOARD:
         BOARD = [[-1, -1, -1, -1, -1, -1, -1, -1, -1],
                    [-1, 0, 0, 0, 0, 0, 0, 0, -1],
-                   [-1, 0, 1, 1, 1, 0, 0, 0, -1],
                    [-1, 0, 0, 1, 1, 1, 0, 0, -1],
+                   [-1, 0, 0, 0, 1, 1, 1, 0, -1],
                    [-1, 0, 0, 0, 0, 0, 0, 0, -1],
                    [-1, -1, -1, -1, -1, -1, -1, -1, -1]]
     else:
@@ -77,11 +77,11 @@ def close_issues(headers):
         if 400 < test.status_code < 500:
             print("Couldn't close right: {}".format(issue['url']))
 
-def make_contributions(x,y):
+def make_contributions(x, y, headers):
     for i in range(10):
-        make_issue('{}, {}'.format(x,y))
+        make_issue('{}, {}'.format(x,y), headers)
 
-    close_issues()
+    close_issues(headers)
 
 ''' GAME OF LIFE '''
 
@@ -119,7 +119,7 @@ def count_to_index(count):
 
 ''' MAIN LAMBDA '''
 
-@app.schedule('cron(0 10 * * ? *)')
+@app.schedule('cron(30 15 * * ? *)')
 def game_handler(event):
     ''' run game of life and create/close issues '''
     ssm = boto3.client('ssm', region_name='us-east-1')
@@ -135,8 +135,8 @@ def game_handler(event):
     }
 
     # Make contributions if 1 for day
-    if board[x][y]:
-        make_contributions(x, y)
+    if BOARD[x][y]:
+        make_contributions(x, y, HEADERS)
 
     # update count / board if needed
     COUNT = str(int(COUNT) + 1)
