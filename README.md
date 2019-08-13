@@ -5,6 +5,13 @@ Runs on my [alt account](https://github.com/sambattalio-gol)
 
 Hopefully over the next year+ it will run the game of life oscillator right!
 
+# Current Screenshot
+
+Using selenium and s3, I am able to update this screenshot daily! So stay tuned.
+
+(The first week of running is August, so the contributions before are not a part of the "game")
+ 
+![Screenshot](https://sbattalio.s3.amazonaws.com/heatmapss.png)
 
 # How it works
 
