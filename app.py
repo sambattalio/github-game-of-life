@@ -4,6 +4,10 @@ import requests
 from copy import deepcopy
 from ast import literal_eval
 from chalice import Chalice
+from datetime import datetime
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 import boto3
 
 # init chalice
@@ -150,3 +154,21 @@ def game_handler(event):
     ssm.put_parameter(Name='COUNT', Value=COUNT, Type='String', Overwrite=True)
 
     return 0
+
+
+
+''' Screenshot Tool '''
+
+@app.schedule('cron(0 16 * * ? *)')
+def screenshot_update(event):
+    # get ss
+    options = Options()
+    options.add_argument( "--headless" )
+    fox = webdriver.Firefox('chalicelib/geckodriver', options=options)
+    fox.get('https://github.com/users/sambattalio-gol/contributions?to=' +
+            datetime.today().strftime('%Y-%m-%d'))
+    ss = fox.find_element(By.CLASS_NAME, 'js-yearly-contributions').screenshot_as_png
+    fox.quit()
+
+    s3 = boto3.client('s3')
+    s3.put_object(Body=ss, Bucket='sbattalio', Key='heatmapss.png')
