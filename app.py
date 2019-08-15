@@ -1,19 +1,24 @@
 import os
 import json
 import requests
+import tarfile
 from copy import deepcopy
 from ast import literal_eval
 from chalice import Chalice
 from datetime import datetime
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 import boto3
 
 # init chalice
 app = Chalice(app_name='game-of-life')
 
-# load variables
+''' HELPERS '''
+
+def s3_public_image(body, bucket, key):
+    boto3.client('s3').put_object(Body=body, Bucket=bucket, Key=key)
+    boto3.resource('s3').ObjectAcl(bucket, key).put(ACL='public-read')
+
 def load_params(ssm):
     params = ssm.get_parameters(Names=['COUNT', 'BOARD', 'ACCESS_TOKEN'])
 
@@ -159,16 +164,12 @@ def game_handler(event):
 
 ''' Screenshot Tool '''
 
-@app.schedule('cron(0 16 * * ? *)')
+@app.schedule('cron(53 2 * * ? *)')
 def screenshot_update(event):
-    # get ss
-    options = Options()
-    options.add_argument( "--headless" )
-    fox = webdriver.Firefox('chalicelib/geckodriver', options=options)
+    fox = webdriver.PhantomJS(executable_path='chalicelib/phantomjs', service_log_path='/tmp/log.log')
     fox.get('https://github.com/users/sambattalio-gol/contributions?to=' +
             datetime.today().strftime('%Y-%m-%d'))
     ss = fox.find_element(By.CLASS_NAME, 'js-yearly-contributions').screenshot_as_png
     fox.quit()
 
-    s3 = boto3.client('s3')
-    s3.put_object(Body=ss, Bucket='sbattalio', Key='heatmapss.png')
+    s3_public_image(ss, os.environ['BUCKET'], os.environ['PIC_KEY'])
