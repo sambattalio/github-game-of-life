@@ -16,7 +16,7 @@ app = Chalice(app_name='game-of-life')
 ''' HELPERS '''
 
 def s3_public_image(body, bucket, key):
-    boto3.client('s3').put_object(Body=body, Bucket=bucket, Key=key)
+    boto3.client('s3').put_object(Body=body, Bucket=bucket, Key=key, ContentType='image/png', CacheControl='max-age=86400')
     boto3.resource('s3').ObjectAcl(bucket, key).put(ACL='public-read')
 
 def load_params(ssm):
@@ -164,7 +164,7 @@ def game_handler(event):
 
 ''' Screenshot Tool '''
 
-@app.schedule('cron(53 2 * * ? *)')
+@app.schedule('cron(0 16 * * ? *)')
 def screenshot_update(event):
     fox = webdriver.PhantomJS(executable_path='chalicelib/phantomjs', service_log_path='/tmp/log.log')
     fox.get('https://github.com/users/sambattalio-gol/contributions?to=' +
