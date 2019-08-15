@@ -11,7 +11,7 @@ Using selenium and s3, I am able to update this screenshot daily! So stay tuned.
 
 (The first week of running is August, so the contributions before are not a part of the "game")
  
-![Screenshot](https://sbattalio.s3.amazonaws.com/heatmapss.png)
+![Screenshot Test](https://sbattalio.s3.amazonaws.com/heatmapss.png)
 
 # How it works
 
