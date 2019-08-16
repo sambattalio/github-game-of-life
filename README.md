@@ -21,6 +21,5 @@ I utilize [aws-chalice](https://github.com/aws/chalice) to create a pretty strai
 ![toad](https://upload.wikimedia.org/wikipedia/commons/1/12/Game_of_life_toad.gif)
 
 
-# Artists rendering of what should appear
 
-![here](https://chadpaste.com/f/btq.png)
+Check out my [blog post](https://www.sambattalio.com/2019/github-game-of-life/) for a _bit_ more insight!
