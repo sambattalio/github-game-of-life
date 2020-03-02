@@ -1,5 +1,5 @@
 # github-game-of-life
-My attempt to make GitHub commit calendar into a working game of life simulation
+My attempt to make GitHub commit calendar into a working [game of life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life_) simulation
 
 Runs on my [alt account](https://github.com/sambattalio-gol)
 
